@@ -3,9 +3,8 @@
 const getRandomNumber = (min, max) => {
   if (max <= min || min < 0 || max < 0) return 'Ошибка';
 
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+  const randomNumber = min + Math.random() * (max + 1 - min);
+  return Math.floor(randomNumber);
 };
 
 getRandomNumber(10, 20);
@@ -13,8 +12,8 @@ getRandomNumber(10, 20);
 const getRandomPoint = (min, max, digits) => {
   if (max <= min || min < 0 || max < 0) return 'Ошибка';
 
-  const randomNumber = Math.random() * (max - min) + min;
-  return randomNumber.toFixed(digits);
+  const randomPoint = min + Math.random() * (max + 1 - min);
+  return randomPoint.toFixed(digits);
 };
 
 getRandomPoint(10, 20, 15);
