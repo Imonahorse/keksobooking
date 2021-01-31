@@ -1,19 +1,29 @@
 'use strict'
 
-const getRandomNumber = (min, max) => {
-  if (max <= min || min < 0 || max < 0) return 'Ошибка';
+const getRandomNumberInRange = (min, max) => min + Math.random() * (max + 1 - min);
 
-  const randomNumber = min + Math.random() * (max + 1 - min);
-  return Math.floor(randomNumber);
+const getRandomInteger = (min, max) => {
+  if (max <= min || min < 0 || max < 0) {
+    //eslint-disable-next-line no-console
+    console.log('error');
+    return;
+  }
+
+  const randomInteger = getRandomNumberInRange(min, max);
+  return Math.floor(randomInteger);
 };
 
-getRandomNumber(10, 20);
+getRandomInteger(10, 20);
 
-const getRandomPoint = (min, max, digits) => {
-  if (max <= min || min < 0 || max < 0) return 'Ошибка';
+const getRandomFloatingPoint = (min, max, digits=2) => {
+  if (max <= min || min < 0 || max < 0){
+    //eslint-disable-next-line no-console
+    console.log('error');
+    return;
+  }
 
-  const randomPoint = min + Math.random() * (max + 1 - min);
-  return randomPoint.toFixed(digits);
+  const randomFloatingPoint = getRandomNumberInRange(min, max) ;
+  return randomFloatingPoint.toFixed(digits);
 };
 
-getRandomPoint(10, 20, 15);
+getRandomFloatingPoint(10, 20, 15);
