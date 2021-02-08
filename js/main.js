@@ -1,10 +1,32 @@
 'use strict'
 
-//ДОМАШНЕЕ ЗАДАНИЕ 2
+const TITLES = ['Привет', 'Hello', 'Bonjour', 'die Empfehlung'];
+const APARTMENTS = ['palace', 'flat', 'house', 'bungalow'];
+const CHECKIN = ['12:00', '13:00', '14:00'];
+const CHECKOUT = ['12:00', '13:00', '14:00'];
+const DESCRIPTIONS = [
+  'Надо брать',
+  'Хорошее предложение',
+  'Подумайте хорошенько',
+  'Кошмар',
+];
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
+const PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+];
 
 const getRandomNumberInRange = (min, max) => min + Math.random() * (max + 1 - min);
 
-const getRandomInteger = (min, max) => {
+const getRandomIntegerInRange = (min, max) => {
   if (max <= min || min < 0 || max < 0) {
     //eslint-disable-next-line no-console
     console.log('error');
@@ -26,63 +48,51 @@ const getRandomFloatingPoint = (min, max, digits = 2) => {
   return randomFloatingPoint.toFixed(digits);
 };
 
-// ДОМАШНЕЕ ЗАДАНИЕ 3
+const getArrayRandomElement = (array) => array[getRandomIntegerInRange(0, array.length - 1)];
 
-// 1 ИЗ ТРЕХ ОБЪЕКТОВ:АВТОР;
+const getRandomArray = (array) => {
+  let arrayList = [];
 
-let author = {};
+  array.forEach((element) => {
+    if(Math.random()>0.5) {
+      return;
+    }
 
-let randomPhotoNumber = '0' + getRandomInteger(1, 8);
+    arrayList.push(element);
+  })
 
-author.avatar = 'img/avatars/user' + randomPhotoNumber + '.png';
-
-//2 ИЗ ТРЕХ ОБЪЕКТОВ: ОФФЕР;
-
-const offer = {};
-const apartments = ['palace', 'flat', 'house', 'bungalow'];
-const time = ['12:00', '13:00', '14:00'];
-const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
-
-const getOneOfFixValues = (array) => parseInt(Math.random() * array.length);
-
-offer.title = 'Рандомный заголовок';
-
-offer.address = 'location ' + getRandomFloatingPoint(0, 100, 5) + ' location ' + getRandomFloatingPoint(0, 100, 5);
-
-offer.price = getRandomInteger(0, 1000000000);
-
-offer.type = apartments[getOneOfFixValues(apartments)];
-
-offer.rooms = getRandomInteger(1, 10);
-
-offer.quests = getRandomInteger(1, 10);
-
-offer.checkin = time[getOneOfFixValues(time)];
-
-offer.checkout = time[getOneOfFixValues(time)];
-
-const randomArrayLength = getRandomInteger(1, features.length);
-features.length = randomArrayLength;
-
-offer.features = [];
-
-for (let i = 0; i < randomArrayLength; i++) {
-  offer.features[i] = features[i];
+  return arrayList;
 }
 
-offer.description = 'Рандомное описание помещения';
 
+const generateOffer = () => {
+  return {
+    author: {
+      avatar: 'img/avatars/user0' + getRandomIntegerInRange(1, 8) + '.png',
+    },
+    offer: {
+      title: getArrayRandomElement(TITLES),
+      address: `${getRandomFloatingPoint(100, 1000)}, ${getRandomFloatingPoint(100, 1000)}`,
+      price: getRandomIntegerInRange(0, 1000000),
+      type: getArrayRandomElement(APARTMENTS),
+      rooms: getRandomIntegerInRange(1, 10),
+      guests: getRandomIntegerInRange(1, 10),
+      checkin: getArrayRandomElement(CHECKIN),
+      checkout: getArrayRandomElement(CHECKOUT),
+      features: getRandomArray(FEATURES),
+      description: getArrayRandomElement(DESCRIPTIONS),
+      photo: getRandomArray(PHOTOS),
+    },
+    location: {
+      x: getRandomFloatingPoint(35.65, 35.7, 5),
+      y: getRandomFloatingPoint(139.7, 139.8, 5),
+    },
+  };
+}
 
-/* todo Тут иногда значение уезжает выше 35.70000, чтобы так не было надо убрать +1 у getRandomNumberInRange,
-    но это надо новую функцию писать наверно */
+const offerList = new Array(10).fill('').map(() => generateOffer());
 
-const location = {};
-location.x = getRandomFloatingPoint(35.65000, 35.70000, 5);
-location.y = getRandomFloatingPoint(139.70000, 139.80000, 5);
+//eslint-disable-next-line no-console
+console.log(offerList);
 
-
-// СКЛЕИВАЕМ ТРИ ОБЪЕКТА В ОДИН
-
-let ad = [author, offer, location];
-console.log(ad);
+const filter = offerList.filter((item) => item.offer.price > 400000);
