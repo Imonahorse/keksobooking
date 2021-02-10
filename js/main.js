@@ -23,6 +23,7 @@ const PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
+const OFFER_COUNT = 10;
 
 const getRandomNumberInRange = (min, max) => min + Math.random() * (max + 1 - min);
 
@@ -51,10 +52,10 @@ const getRandomFloatingPoint = (min, max, digits = 2) => {
 const getArrayRandomElement = (array) => array[getRandomIntegerInRange(0, array.length - 1)];
 
 const getRandomArray = (array) => {
-  let arrayList = [];
+  const arrayList = [];
 
   array.forEach((element) => {
-    if(Math.random()>0.5) {
+    if (Math.random() > 0.5) {
       return;
     }
 
@@ -68,11 +69,14 @@ const getRandomArray = (array) => {
 const generateOffer = () => {
   return {
     author: {
-      avatar: 'img/avatars/user0' + getRandomIntegerInRange(1, 8) + '.png',
+      avatar: `img/avatars/user0${getRandomIntegerInRange(1, 8)}.png`,
     },
     offer: {
       title: getArrayRandomElement(TITLES),
-      address: `${getRandomFloatingPoint(100, 1000)}, ${getRandomFloatingPoint(100, 1000)}`,
+      address: {
+        x: getRandomFloatingPoint(35.65, 35.7, 5),
+        y: getRandomFloatingPoint(139.7, 139.8, 5),
+      },
       price: getRandomIntegerInRange(0, 1000000),
       type: getArrayRandomElement(APARTMENTS),
       rooms: getRandomIntegerInRange(1, 10),
@@ -90,9 +94,8 @@ const generateOffer = () => {
   };
 }
 
-const offerList = new Array(10).fill('').map(() => generateOffer());
+const offerList = new Array(OFFER_COUNT).fill('').map(() => generateOffer());
 
 //eslint-disable-next-line no-console
 console.log(offerList);
 
-const filter = offerList.filter((item) => item.offer.price > 400000);
