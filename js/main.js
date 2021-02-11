@@ -65,18 +65,23 @@ const getRandomArray = (array) => {
   return arrayList;
 }
 
+const getAddress = () => {
+  return {
+    x: getRandomFloatingPoint(35.65, 35.7, 5),
+    y: getRandomFloatingPoint(139.7, 139.8, 5),
+  }
+}
 
 const generateOffer = () => {
+  const coordinates = getAddress();
+
   return {
     author: {
       avatar: `img/avatars/user0${getRandomIntegerInRange(1, 8)}.png`,
     },
     offer: {
       title: getArrayRandomElement(TITLES),
-      address: {
-        x: getRandomFloatingPoint(35.65, 35.7, 5),
-        y: getRandomFloatingPoint(139.7, 139.8, 5),
-      },
+      address: coordinates,
       price: getRandomIntegerInRange(0, 1000000),
       type: getArrayRandomElement(APARTMENTS),
       rooms: getRandomIntegerInRange(1, 10),
@@ -87,10 +92,7 @@ const generateOffer = () => {
       description: getArrayRandomElement(DESCRIPTIONS),
       photo: getRandomArray(PHOTOS),
     },
-    location: {
-      x: getRandomFloatingPoint(35.65, 35.7, 5),
-      y: getRandomFloatingPoint(139.7, 139.8, 5),
-    },
+    location: coordinates,
   };
 }
 
