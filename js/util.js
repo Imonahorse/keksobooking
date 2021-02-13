@@ -45,4 +45,11 @@ const getAddress = () => {
   }
 };
 
-export {getRandomNumberInRange, getRandomIntegerInRange, getRandomFloatingPoint, getArrayRandomElement, getRandomArray, getAddress};
+export {
+  getRandomNumberInRange,
+  getRandomIntegerInRange,
+  getRandomFloatingPoint,
+  getArrayRandomElement,
+  getRandomArray,
+  getAddress
+};
