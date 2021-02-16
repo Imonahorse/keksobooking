@@ -1,4 +1,4 @@
-import {offerList} from './data.js';
+import {similarCardList} from './similar-cards.js'
 
 //eslint-disable-next-line no-console
-console.log(offerList)
+console.log(similarCardList);

@@ -44,7 +44,7 @@ const generateOffer = () => {
 
   return {
     author: {
-      avatar: `img/avatars/user0${getRandomIntegerInRange(1, 8)}.png`,
+      avatar: `../img/avatars/user0${getRandomIntegerInRange(1, 8)}.png`,
     },
     offer: {
       title: getArrayRandomElement(TITLES),
@@ -63,6 +63,6 @@ const generateOffer = () => {
   };
 }
 
-const offerList = new Array(OFFER_COUNT).fill('').map(() => generateOffer());
+const offerList = () => new Array(OFFER_COUNT).fill('').map(() => generateOffer());
 
 export { offerList };
