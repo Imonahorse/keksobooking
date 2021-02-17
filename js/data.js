@@ -38,7 +38,6 @@ const PHOTOS = [
 
 const OFFER_COUNT = 10;
 
-
 const generateOffer = () => {
   const coordinates = getAddress();
 
@@ -63,6 +62,6 @@ const generateOffer = () => {
   };
 }
 
-const offerList = () => new Array(OFFER_COUNT).fill('').map(() => generateOffer());
+const getOfferList = () => new Array(OFFER_COUNT).fill('').map(() => generateOffer());
 
-export { offerList };
+export {getOfferList};

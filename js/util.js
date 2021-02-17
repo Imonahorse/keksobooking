@@ -45,20 +45,21 @@ const getAddress = () => {
   }
 };
 
-const getPopupType = (item) => {
-  if(item === 'flat') {
-    return 'Квартира'
+const translateType = (type) => {
+  switch(type) {
+    case 'flat':
+      return 'Квартира';
+
+    case 'house':
+      return 'Дом';
+
+    case 'palace':
+      return 'Дворец';
+
+    case 'bungalow':
+      return 'Бунгало';
   }
-  if(item === 'house') {
-    return 'Дом'
-  }
-  if(item === 'palace') {
-    return 'Дворец'
-  }
-  if(item === 'bungalow') {
-    return 'Бунгало'
-  }
-}
+};
 
 export {
   getRandomNumberInRange,
@@ -67,5 +68,5 @@ export {
   getArrayRandomElement,
   getRandomArray,
   getAddress,
-  getPopupType
+  translateType
 };

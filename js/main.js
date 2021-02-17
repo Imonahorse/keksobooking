@@ -1,4 +1,5 @@
-import {similarCardList} from './similar-cards.js'
+import {fillMap} from './popup.js';
 
-//eslint-disable-next-line no-console
-console.log(similarCardList);
+fillMap();
+
+
