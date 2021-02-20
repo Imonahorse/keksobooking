@@ -45,28 +45,11 @@ const getAddress = () => {
   }
 };
 
-const translateType = (type) => {
-  switch(type) {
-    case 'flat':
-      return 'Квартира';
-
-    case 'house':
-      return 'Дом';
-
-    case 'palace':
-      return 'Дворец';
-
-    case 'bungalow':
-      return 'Бунгало';
-  }
-};
-
 export {
   getRandomNumberInRange,
   getRandomIntegerInRange,
   getRandomFloatingPoint,
   getArrayRandomElement,
   getRandomArray,
-  getAddress,
-  translateType
+  getAddress
 };
