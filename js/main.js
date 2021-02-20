@@ -1,4 +1,5 @@
-import {offerList} from './data.js';
+import {fillMap} from './popup.js';
 
-//eslint-disable-next-line no-console
-console.log(offerList)
+fillMap();
+
+
