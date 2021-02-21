@@ -11,38 +11,18 @@ const apartmentPrice = form.querySelector('#price');
 const timeIn = form.querySelector('#timein');
 const timeOut = form.querySelector('#timeout');
 
-
 const onTypeChange = (evt) => {
-  switch (type.value) {
-    case 'bungalow':
-      apartmentPrice.placeholder = minPrice[type.value];
-      apartmentPrice.min = minPrice[type.value];
-      return;
-    case'flat':
-      apartmentPrice.placeholder = minPrice[type.value];
-      apartmentPrice.min = minPrice[type.value];
-      return;
-    case 'house' :
-      apartmentPrice.placeholder = minPrice[type.value];
-      apartmentPrice.min = minPrice[type.value];
-      return;
-    case 'palace':
-      apartmentPrice.placeholder = minPrice[type.value];
-      apartmentPrice.min = minPrice[type.value];
-      return;
-  }
+  apartmentPrice.placeholder = minPrice[evt.target.value];
+  apartmentPrice.min = minPrice[evt.target.value];
 };
-
 
 typeOfApartment.addEventListener('change', onTypeChange)
 
-timeIn.addEventListener('change', () => {
-  timeOut.value = timeIn.value;
-})
+const onSelectChange = (evt) => {
+  timeIn.value = evt.target.value;
+  timeOut.value = evt.target.value;
+}
 
-timeOut.addEventListener('change', () => {
-  timeIn.value = timeOut.value;
-})
-
-
+timeIn.addEventListener('change', onSelectChange);
+timeOut.addEventListener('change', onSelectChange);
 
