@@ -1,6 +1,5 @@
 import {fillMap} from './popup.js';
-import {formTypeAndTime} from './form.js'
+import './form.js';
 
 fillMap();
 
-formTypeAndTime();
