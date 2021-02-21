@@ -3,33 +3,6 @@ import {getOfferList} from './data.js';
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const map = document.querySelector('.map__canvas');
 
-const createFeaturesList = (arr, clone) => {
-  const featuresList = clone.querySelector('.popup__features');
-  featuresList.innerHTML = '';
-
-  arr.forEach((item) => {
-    const element = document.createElement('li');
-    element.className = 'popup__feature';
-    element.classList.add('popup__feature--' + item);
-    featuresList.appendChild(element);
-  })
-
-  return featuresList;
-}
-
-const createPhotosList = (arr, clone) => {
-  const photoList = clone.querySelector('.popup__photos');
-  photoList.innerHTML = '';
-
-  arr.forEach((item) => {
-    const photoItem = cardTemplate.querySelector('.popup__photo').cloneNode(true);
-    photoItem.src = item;
-    photoList.appendChild(photoItem);
-  });
-
-  return photoList;
-};
-
 const translateType = (type) => {
   switch (type) {
     case 'flat':
@@ -44,6 +17,33 @@ const translateType = (type) => {
     case 'bungalow':
       return 'Бунгало';
   }
+};
+
+const createFeaturesList = (arr, clone) => {
+  const featuresList = clone.querySelector('.popup__features');
+  featuresList.innerHTML = '';
+
+  arr.forEach((item) => {
+    const element = document.createElement('li');
+    element.classList.add('popup__feature', 'popup__feature--' + item);
+    featuresList.appendChild(element);
+  })
+
+  return featuresList;
+}
+
+const createPhotosList = (arr, clone) => {
+  const photoList = clone.querySelector('.popup__photos');
+  const photo = clone.querySelector('.popup__photo')
+  photoList.innerHTML = '';
+
+  arr.forEach((item) => {
+    const photoItem = photo.cloneNode(true);
+    photoItem.src = item;
+    photoList.appendChild(photoItem);
+  });
+
+  return photoList;
 };
 
 const createSingleCard = ({offer, author}) => {
