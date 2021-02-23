@@ -63,8 +63,4 @@ const createSingleCard = ({offer, author}) => {
   return card;
 };
 
-const fillMap = () => {
-  map.appendChild(createSingleCard(getOfferList()[0]));
-}
-
-export {fillMap};
+export {createSingleCard};
