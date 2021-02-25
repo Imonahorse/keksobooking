@@ -1,115 +1,87 @@
+/* global L:readonly */
 import {createSingleCard} from './popup.js';
-import './form.js';
 import {getOfferList} from './data.js';
+import {blockPage} from './form.js'
 
-const map = L.map('map-canvas');
-const layerInfo = {
-  url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  copyright: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+const LayerInfo = {
+  URL: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  COPYRIGHT: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 };
-const startAddressValue = {
-  x: 35.652832,
-  y: 139.839478,
+
+const StartAddressValue = {
+  X: 35.652832,
+  Y: 139.839478,
 }
-const mapZoom = 8;
-const commonIcon = {
-  url: 'img/pin.svg',
-  size: [40, 40],
-  anchor: [20, 40],
+
+const MAP_ZOOM = 8;
+const ICON_SIZE_X = 40;
+const ICON_SIZE_Y = 40;
+const ICON_ANCHOR_X = ICON_SIZE_X / 2;
+const ICON_ANCHOR_Y = ICON_SIZE_Y;
+
+const CommonIcon = {
+  URL: 'img/pin.svg',
+  SIZE: [ICON_SIZE_X, ICON_SIZE_Y],
+  ANCHOR: [ICON_ANCHOR_X, ICON_ANCHOR_Y],
 }
-const mainIcon = {
-  url: 'img/main-pin.svg',
-  size: [56, 56],
-  anchor: [26, 56],
+
+const MainIcon = {
+  URL: 'img/main-pin.svg',
+  SIZE: [ICON_SIZE_X, ICON_SIZE_Y],
+  ANCHOR: [ICON_ANCHOR_X, ICON_ANCHOR_Y],
 }
+
+const offerList = getOfferList();
+const map = L.map('map-canvas');
 const addressInput = document.querySelector('#address');
-addressInput.value = `${startAddressValue.x}, ${startAddressValue.y}`;
+addressInput.value = `${StartAddressValue.X}, ${StartAddressValue.Y}`;
 
-const disableNoticeForm = (toggle) => {
-  const form = document.querySelector('.ad-form');
-  const fieldsets = form.querySelectorAll('fieldset');
-  const arr = Array.from(fieldsets);
-  arr.forEach((item) => item.disabled = toggle);
-  switch (toggle) {
-    case true:
-      return form.classList.add('ad-form--disabled');
-    case false:
-      return form.classList.remove('ad-form--disabled');
-  }
-}
+map.on('load', () => {
+  blockPage(false);
+});
 
-const disableMapForm = (toggle) => {
-  const form = document.querySelector('.map__filters');
-  const selects = form.querySelectorAll('select');
-  const arr = Array.from(selects);
-  arr.forEach((item) => item.disabled = toggle);
-  const fieldset = form.querySelector('fieldset');
-  fieldset.disabled = toggle;
-  switch (toggle) {
-    case true:
-      return form.classList.add('map__filters--disabled');
-    case false:
-      return form.classList.remove('map__filters--disabled');
-  }
+map.setView({
+  lat: StartAddressValue.X,
+  lng: StartAddressValue.Y,
+}, MAP_ZOOM);
 
-}
+L.tileLayer(
+  LayerInfo.URL,
+  {
+    attribution: LayerInfo.COPYRIGHT,
+  },
+).addTo(map);
 
-disableNoticeForm(true);
+const mainPinIcon = L.icon({
+  iconUrl: MainIcon.URL,
+  iconSize: MainIcon.SIZE,
+  iconAnchor: MainIcon.ANCHOR,
+})
 
-disableMapForm(true);
+const marker = L.marker(
+  {
+    lat: StartAddressValue.X,
+    lng: StartAddressValue.Y,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+)
 
-const createMap =(place, layer, icon) => {
-  place.on('click', () => {
-    console.log('zoom')
-    disableNoticeForm(false);
-    disableMapForm(false);
-  });
+marker.on('move', (evt) => {
+  addressInput.value = `${evt.target.getLatLng().lat.toFixed(6)}, ${evt.target.getLatLng().lng.toFixed(6)}`
+})
 
-  place.setView({
-    lat: startAddressValue.x,
-    lng: startAddressValue.y,
-  }, mapZoom);
+marker.addTo(map);
 
-
-  L.tileLayer(
-    layer.url,
-    {
-      attribution: layer.copyright,
-    },
-  ).addTo(map);
-
-
-  const mainPinIcon = L.icon({
-    iconUrl: icon.url,
-    iconSize: icon.size,
-    iconAnchor: icon.anchor,
-  })
-
-  const marker = L.marker(
-    {
-      lat: startAddressValue.x,
-      lng: startAddressValue.y,
-    },
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  )
-
-  marker.on('moveend', (evt) => {
-    addressInput.value = evt.target.getLatLng();
-  })
-
-  marker.addTo(map);
-}
-
-const addOffersOnMap = (arr, card, icon) => {
+const renderMarkers = (arr) => {
 
   arr.forEach((point) => {
-    const pin = L.icon({
-      iconUrl: icon.url,
-      iconSize: icon.size,
-      iconAnchor: icon.anchor,
+    const icon = L.icon({
+      iconUrl: CommonIcon.URL,
+      iconSize: CommonIcon.SIZE,
+      iconAnchor: CommonIcon.ANCHOR,
     });
 
     const marker = L.marker(
@@ -118,13 +90,13 @@ const addOffersOnMap = (arr, card, icon) => {
         lng: point.location.y,
       },
       {
-        pin,
+        icon,
       },
     );
 
     marker
       .addTo(map)
-      .bindPopup(card(point),
+      .bindPopup(createSingleCard(point),
         {
           keepInView: true,
         },
@@ -132,6 +104,4 @@ const addOffersOnMap = (arr, card, icon) => {
   });
 }
 
-createMap(map, layerInfo, mainIcon)
-
-addOffersOnMap(getOfferList(), createSingleCard, commonIcon);
+renderMarkers(offerList);
