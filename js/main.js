@@ -1,5 +1,2 @@
-import {fillMap} from './popup.js';
+import './map.js';
 import './form.js';
-
-fillMap();
-
