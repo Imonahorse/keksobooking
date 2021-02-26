@@ -17,9 +17,8 @@ const RoomValues = {
 
 const pageForm = document.querySelector('.ad-form');
 const mapForm = document.querySelector('.map__filters');
-const selects = mapForm.querySelectorAll('select');
-const mapFildsets = mapForm.querySelectorAll('fieldset');
-const pageFieldsets = pageForm.querySelectorAll('fieldset');
+const selects = document.querySelectorAll('select');
+const fildsets = document.querySelectorAll('fieldset');
 const title = pageForm.querySelector('#title');
 const typeOfApartment = pageForm.querySelector('#type');
 const apartmentPrice = pageForm.querySelector('#price');
@@ -29,14 +28,12 @@ const roomNumber = pageForm.querySelector('#room_number');
 const capacity = pageForm.querySelector('#capacity');
 const address = pageForm.querySelector('#address');
 
-address.readOnly = 'readonly';
-
-const onRoomNumberChange = (evt) => {
-  if (+(evt.target.value) < +(capacity.value)) {
+const onRoomNumberChange = () => {
+  if (+roomNumber.value < +capacity.value) {
     roomNumber.setCustomValidity('Количество комнат должно быть больше или равно количеству мест');
-  } else if (evt.target.value === RoomValues.ROOM && capacity.value !== RoomValues.PLACE) {
+  } else if (roomNumber.value === RoomValues.ROOM && capacity.value !== RoomValues.PLACE) {
     roomNumber.setCustomValidity(`Для ${RoomValues.ROOM} комнат количество мест должно быть "не для гостей"`);
-  } else if (capacity.value === RoomValues.PLACE && evt.target.value !== RoomValues.ROOM) {
+  } else if (capacity.value === RoomValues.PLACE && roomNumber.value !== RoomValues.ROOM) {
     roomNumber.setCustomValidity(`Количество комнат при выборе "не для гостей" должно быть ${RoomValues.ROOM}`);
   } else {
     roomNumber.setCustomValidity('');
@@ -45,22 +42,20 @@ const onRoomNumberChange = (evt) => {
 
 const blockPage = (toggle) => {
   selects.forEach((item) => item.disabled = toggle);
-  mapFildsets.forEach((item) => item.disabled = toggle);
-  pageFieldsets.forEach((item) => item.disabled = toggle);
+  fildsets.forEach((item) => item.disabled = toggle);
 
   if (toggle === true) {
     pageForm.classList.add('ad-form--disabled');
     mapForm.classList.add('map__filters--disabled');
-  }
-  if (toggle === false) {
+  } else {
     pageForm.classList.remove('ad-form--disabled');
     mapForm.classList.remove('map__filters--disabled');
   }
 }
 
-const onTypeChange = (evt) => {
-  apartmentPrice.placeholder = minPrice[evt.target.value];
-  apartmentPrice.min = minPrice[evt.target.value];
+const onTypeChange = () => {
+  apartmentPrice.placeholder = minPrice[typeOfApartment.value];
+  apartmentPrice.min = minPrice[typeOfApartment.value];
 };
 
 const onSelectChange = (evt) => {
@@ -68,10 +63,7 @@ const onSelectChange = (evt) => {
   timeOut.value = evt.target.value;
 }
 
-title.minLength = TitleRange.MIN;
-title.maxLength = TitleRange.MAX;
-
-const onTitleInput = () => {
+const onTitleChange = () => {
   const value = title.value.length
   if (value < TitleRange.MIN) {
     title.setCustomValidity(`Сообщение слишком короткое, не хватает еще ${TitleRange.MIN - value} символов`)
@@ -80,8 +72,9 @@ const onTitleInput = () => {
   } else {
     title.setCustomValidity('');
   }
-  title.reportValidity()
+  title.reportValidity();
 }
+
 
 typeOfApartment.addEventListener('change', onTypeChange);
 
@@ -89,10 +82,18 @@ timeIn.addEventListener('change', onSelectChange);
 
 timeOut.addEventListener('change', onSelectChange);
 
-title.addEventListener('input', onTitleInput);
+title.addEventListener('change', onTitleChange);
 
 roomNumber.addEventListener('change', onRoomNumberChange);
 
+capacity.addEventListener('change', onRoomNumberChange);
+
+
+title.minLength = TitleRange.MIN;
+title.maxLength = TitleRange.MAX;
+address.readOnly = 'readonly';
+onTypeChange();
+onRoomNumberChange();
 blockPage(true);
 
 export {blockPage};

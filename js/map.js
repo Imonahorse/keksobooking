@@ -37,7 +37,7 @@ const addressInput = document.querySelector('#address');
 addressInput.value = `${StartAddressValue.X}, ${StartAddressValue.Y}`;
 
 map.on('load', () => {
-  blockPage(false);
+  blockPage();
 });
 
 map.setView({
