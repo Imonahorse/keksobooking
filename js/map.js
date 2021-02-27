@@ -37,7 +37,7 @@ const addressInput = document.querySelector('#address');
 addressInput.value = `${StartAddressValue.X}, ${StartAddressValue.Y}`;
 
 map.on('load', () => {
-  blockPage(false);
+  blockPage();
 });
 
 map.setView({
@@ -70,7 +70,8 @@ const marker = L.marker(
 )
 
 marker.on('move', (evt) => {
-  addressInput.value = `${evt.target.getLatLng().lat.toFixed(6)}, ${evt.target.getLatLng().lng.toFixed(6)}`
+  const {lat, lng} = evt.target.getLatLng();
+  addressInput.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`
 })
 
 marker.addTo(map);
