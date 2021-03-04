@@ -1,3 +1,6 @@
+import {sendData} from './api.js';
+import {markerReset} from './map.js';
+
 const minPrice = {
   bungalow: 0,
   flat: 1000,
@@ -15,10 +18,12 @@ const RoomValues = {
   PLACE: '0',
 }
 
+const main = document.querySelector('main');
+const map = document.querySelector('.map');
 const pageForm = document.querySelector('.ad-form');
 const mapForm = document.querySelector('.map__filters');
 const selects = document.querySelectorAll('select');
-const fildsets = document.querySelectorAll('fieldset');
+const fieldsets = document.querySelectorAll('fieldset');
 const title = pageForm.querySelector('#title');
 const typeOfApartment = pageForm.querySelector('#type');
 const apartmentPrice = pageForm.querySelector('#price');
@@ -27,6 +32,7 @@ const timeOut = pageForm.querySelector('#timeout');
 const roomNumber = pageForm.querySelector('#room_number');
 const capacity = pageForm.querySelector('#capacity');
 const address = pageForm.querySelector('#address');
+const resetButton = pageForm.querySelector('.ad-form__reset');
 
 const onRoomNumberChange = () => {
   if (+roomNumber.value < +capacity.value) {
@@ -42,7 +48,7 @@ const onRoomNumberChange = () => {
 
 const blockPage = (toggle) => {
   selects.forEach((item) => item.disabled = toggle);
-  fildsets.forEach((item) => item.disabled = toggle);
+  fieldsets.forEach((item) => item.disabled = toggle);
 
   if (toggle === true) {
     pageForm.classList.add('ad-form--disabled');
@@ -75,6 +81,12 @@ const onTitleChange = () => {
   title.reportValidity();
 }
 
+const onResetClick = (evt) => {
+  evt.preventDefault();
+  pageForm.reset();
+  markerReset();
+  address.value = `${StartAddressValue.X}, ${StartAddressValue.Y}`;
+};
 
 typeOfApartment.addEventListener('change', onTypeChange);
 
@@ -88,6 +100,66 @@ roomNumber.addEventListener('change', onRoomNumberChange);
 
 capacity.addEventListener('change', onRoomNumberChange);
 
+resetButton.addEventListener('click', onResetClick);
+
+const formSubmited = () => {
+  const successTemplate = document.querySelector('#success').content.querySelector('.success');
+  const successMessage = successTemplate.cloneNode(true);
+
+
+  const onErrorClick = (evt) => {
+    if (evt.keyCode === 27) {
+      successMessage.remove();
+      onResetClick(evt);
+    } else {
+      successMessage.remove();
+      onResetClick(evt)
+    }
+  }
+
+  window.addEventListener('keydown', onErrorClick);
+
+  window.addEventListener('click', onErrorClick);
+
+  map.style.zIndex = '0';
+  main.appendChild(successMessage);
+}
+
+const formFailed = () => {
+  const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  const errorMessage = errorTemplate.cloneNode(true);
+  const button = errorMessage.querySelector('.error__button');
+
+  const onErrorClick = (evt) => {
+
+    if (evt.keyCode === 27) {
+      errorMessage.remove();
+      onResetClick(evt);
+    }
+    errorMessage.remove();
+    onResetClick(evt);
+  }
+
+  button.addEventListener('click', onErrorClick);
+
+  window.addEventListener('keydown', onErrorClick)
+
+  window.addEventListener('click', onErrorClick)
+
+  map.style.zIndex = '0';
+  main.appendChild(errorMessage)
+};
+
+const setPageFormSubmit = () => {
+
+  pageForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
+    sendData(formSubmited, formFailed, formData)
+  });
+};
 
 title.minLength = TitleRange.MIN;
 title.maxLength = TitleRange.MAX;
@@ -96,5 +168,4 @@ onTypeChange();
 onRoomNumberChange();
 blockPage(true);
 
-export {blockPage};
-
+export {blockPage, setPageFormSubmit};

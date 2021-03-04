@@ -47,7 +47,7 @@ const createSingleCard = ({offer, author}) => {
   const card = cardTemplate.cloneNode(true);
 
   card.querySelector('.popup__title').textContent = offer.title;
-  card.querySelector('.popup__text--address').textContent = `${offer.address.x}, ${offer.address.y}`;
+  card.querySelector('.popup__text--address').textContent = offer.address;
   card.querySelector('.popup__text--price').textContent = `${offer.price}₽/ночь`;
   card.querySelector('.popup__description').textContent = offer.description;
   card.querySelector('.popup__avatar').src = author.avatar;
@@ -55,7 +55,7 @@ const createSingleCard = ({offer, author}) => {
   card.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   card.querySelector('.popup__type').textContent = translateType(offer.type);
   createFeaturesList(offer.features, card);
-  createPhotosList(offer.photo, card);
+  createPhotosList(offer.photos, card);
 
   return card;
 };

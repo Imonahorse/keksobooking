@@ -56,7 +56,7 @@ const generateOffer = () => {
       checkout: getArrayRandomElement(CHECKOUT),
       features: getRandomArray(FEATURES),
       description: getArrayRandomElement(DESCRIPTIONS),
-      photo: getRandomArray(PHOTOS),
+      photos: getRandomArray(PHOTOS),
     },
     location: coordinates,
   };

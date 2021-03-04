@@ -1,6 +1,5 @@
 /* global L:readonly */
 import {createSingleCard} from './popup.js';
-import {getOfferList} from './data.js';
 import {blockPage} from './form.js'
 
 const LayerInfo = {
@@ -31,7 +30,6 @@ const MainIcon = {
   ANCHOR: [ICON_ANCHOR_X, ICON_ANCHOR_Y],
 }
 
-const offerList = getOfferList();
 const map = L.map('map-canvas');
 const addressInput = document.querySelector('#address');
 addressInput.value = `${StartAddressValue.X}, ${StartAddressValue.Y}`;
@@ -87,8 +85,8 @@ const renderMarkers = (arr) => {
 
     const marker = L.marker(
       {
-        lat: point.location.x,
-        lng: point.location.y,
+        lat: point.location.lat,
+        lng: point.location.lng,
       },
       {
         icon,
@@ -105,4 +103,13 @@ const renderMarkers = (arr) => {
   });
 }
 
-renderMarkers(offerList);
+const markerReset = () => {
+  marker.setLatLng(
+    {
+      lat: StartAddressValue.X,
+      lng: StartAddressValue.Y,
+    },
+  )
+}
+
+export {renderMarkers, markerReset}
