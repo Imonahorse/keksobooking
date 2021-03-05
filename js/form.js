@@ -1,4 +1,5 @@
 import {sendData} from './api.js';
+import {showSuccessMessage, showFailMessage} from './message.js';
 import {markerReset} from './map.js';
 
 const minPrice = {
@@ -18,8 +19,6 @@ const RoomValues = {
   PLACE: '0',
 }
 
-const main = document.querySelector('main');
-const map = document.querySelector('.map');
 const pageForm = document.querySelector('.ad-form');
 const mapForm = document.querySelector('.map__filters');
 const selects = document.querySelectorAll('select');
@@ -85,8 +84,19 @@ const onResetClick = (evt) => {
   evt.preventDefault();
   pageForm.reset();
   markerReset();
-  address.value = `${StartAddressValue.X}, ${StartAddressValue.Y}`;
-};
+}
+
+const formSubmitted = () => {
+  showSuccessMessage();
+  pageForm.reset();
+  markerReset();
+}
+
+const formFailed = () => {
+  showFailMessage();
+  pageForm.reset();
+  markerReset();
+}
 
 typeOfApartment.addEventListener('change', onTypeChange);
 
@@ -102,54 +112,6 @@ capacity.addEventListener('change', onRoomNumberChange);
 
 resetButton.addEventListener('click', onResetClick);
 
-const formSubmited = () => {
-  const successTemplate = document.querySelector('#success').content.querySelector('.success');
-  const successMessage = successTemplate.cloneNode(true);
-
-
-  const onErrorClick = (evt) => {
-    if (evt.keyCode === 27) {
-      successMessage.remove();
-      onResetClick(evt);
-    } else {
-      successMessage.remove();
-      onResetClick(evt)
-    }
-  }
-
-  window.addEventListener('keydown', onErrorClick);
-
-  window.addEventListener('click', onErrorClick);
-
-  map.style.zIndex = '0';
-  main.appendChild(successMessage);
-}
-
-const formFailed = () => {
-  const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-  const errorMessage = errorTemplate.cloneNode(true);
-  const button = errorMessage.querySelector('.error__button');
-
-  const onErrorClick = (evt) => {
-
-    if (evt.keyCode === 27) {
-      errorMessage.remove();
-      onResetClick(evt);
-    }
-    errorMessage.remove();
-    onResetClick(evt);
-  }
-
-  button.addEventListener('click', onErrorClick);
-
-  window.addEventListener('keydown', onErrorClick)
-
-  window.addEventListener('click', onErrorClick)
-
-  map.style.zIndex = '0';
-  main.appendChild(errorMessage)
-};
-
 const setPageFormSubmit = () => {
 
   pageForm.addEventListener('submit', (evt) => {
@@ -157,7 +119,7 @@ const setPageFormSubmit = () => {
 
     const formData = new FormData(evt.target);
 
-    sendData(formSubmited, formFailed, formData)
+    sendData(formSubmitted, formFailed, formData)
   });
 };
 
@@ -168,4 +130,4 @@ onTypeChange();
 onRoomNumberChange();
 blockPage(true);
 
-export {blockPage, setPageFormSubmit};
+export {blockPage, setPageFormSubmit, formFailed};

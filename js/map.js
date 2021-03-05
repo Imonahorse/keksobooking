@@ -8,8 +8,8 @@ const LayerInfo = {
 };
 
 const StartAddressValue = {
-  X: 35.652832,
-  Y: 139.839478,
+  X: 35.65283,
+  Y: 139.83947,
 }
 
 const MAP_ZOOM = 8;
