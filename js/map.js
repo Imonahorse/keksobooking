@@ -2,21 +2,21 @@
 import {createSingleCard} from './popup.js';
 import {blockPage} from './form.js'
 
+const MAP_ZOOM = 8;
+const ICON_SIZE_X = 40;
+const ICON_SIZE_Y = 40;
+const ICON_ANCHOR_X = ICON_SIZE_X / 2;
+const ICON_ANCHOR_Y = ICON_SIZE_Y;
+
 const LayerInfo = {
-  URL: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  COPYRIGHT: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  URL: 'https://tile.jawg.io/de746faa-447c-4eb6-8260-7a692a455863/{z}/{x}/{y}.png?access-token=glVpOAWw5vB9ajv40MQCRq5QREOPc7FO4ig4CwVcuhqC8YYJOMtjg4lq9KmZ7ATT',
+  COPYRIGHT: '<a href=\\"https://www.jawg.io\\" target=\\"_blank\\">&copy; Jawg</a> - <a href=\\"https://www.openstreetmap.org\\" target=\\"_blank\\">&copy; OpenStreetMap</a>&nbsp;contributors',
 };
 
 const StartAddressValue = {
   X: 35.65283,
   Y: 139.83947,
 }
-
-const MAP_ZOOM = 8;
-const ICON_SIZE_X = 40;
-const ICON_SIZE_Y = 40;
-const ICON_ANCHOR_X = ICON_SIZE_X / 2;
-const ICON_ANCHOR_Y = ICON_SIZE_Y;
 
 const CommonIcon = {
   URL: 'img/pin.svg',
@@ -34,8 +34,10 @@ const map = L.map('map-canvas');
 const addressInput = document.querySelector('#address');
 addressInput.value = `${StartAddressValue.X}, ${StartAddressValue.Y}`;
 
+blockPage(true);
+
 map.on('load', () => {
-  blockPage();
+  blockPage(false);
 });
 
 map.setView({
@@ -74,9 +76,9 @@ marker.on('move', (evt) => {
 
 marker.addTo(map);
 
-const renderMarkers = (arr) => {
+const renderMarkers = (points) => {
 
-  arr.forEach((point) => {
+  points.forEach((point) => {
     const icon = L.icon({
       iconUrl: CommonIcon.URL,
       iconSize: CommonIcon.SIZE,
@@ -103,7 +105,7 @@ const renderMarkers = (arr) => {
   });
 }
 
-const markerReset = () => {
+const resetMarker = () => {
   marker.setLatLng(
     {
       lat: StartAddressValue.X,
@@ -112,4 +114,8 @@ const markerReset = () => {
   )
 }
 
-export {renderMarkers, markerReset}
+const resetMap = () => {
+  map.panTo([StartAddressValue.X, StartAddressValue.Y]);
+}
+
+export {renderMarkers, resetMarker, resetMap}

@@ -1,14 +1,14 @@
-const DATA_URL = 'https://22.javascript.pages.academy/keksoboo9king'
+const API_URL = 'https://22.javascript.pages.academy/keksobooking'
 
 const getData = (onSuccess, onFail) => {
-  fetch(`${DATA_URL}/data`)
+  fetch(`${API_URL}/data`)
     .then((response) => response.json())
     .then((markers) => onSuccess(markers))
     .catch(() => onFail())
 };
 
 const sendData = (onSuccess, onFail, body) => {
-  fetch(DATA_URL,
+  fetch(API_URL,
     {
       method: 'POST',
       body,

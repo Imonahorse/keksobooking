@@ -1,6 +1,6 @@
 import {sendData} from './api.js';
 import {showSuccessMessage, showFailMessage} from './message.js';
-import {markerReset} from './map.js';
+import {resetMarker, resetMap} from './map.js';
 
 const minPrice = {
   bungalow: 0,
@@ -83,19 +83,21 @@ const onTitleChange = () => {
 const onResetClick = (evt) => {
   evt.preventDefault();
   pageForm.reset();
-  markerReset();
+  resetMarker();
+  resetMap();
 }
 
-const formSubmitted = () => {
+const handleFormSubmit = () => {
   showSuccessMessage();
   pageForm.reset();
-  markerReset();
+  resetMarker();
+  resetMap();
 }
 
-const formFailed = () => {
+const handleFormFail = () => {
   showFailMessage();
-  pageForm.reset();
-  markerReset();
+  resetMarker();
+  resetMap();
 }
 
 typeOfApartment.addEventListener('change', onTypeChange);
@@ -113,13 +115,12 @@ capacity.addEventListener('change', onRoomNumberChange);
 resetButton.addEventListener('click', onResetClick);
 
 const setPageFormSubmit = () => {
-
   pageForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const formData = new FormData(evt.target);
 
-    sendData(formSubmitted, formFailed, formData)
+    sendData(handleFormSubmit, handleFormFail, formData)
   });
 };
 
@@ -128,6 +129,5 @@ title.maxLength = TitleRange.MAX;
 address.readOnly = 'readonly';
 onTypeChange();
 onRoomNumberChange();
-blockPage(true);
 
-export {blockPage, setPageFormSubmit, formFailed};
+export {blockPage, setPageFormSubmit, handleFormFail};
