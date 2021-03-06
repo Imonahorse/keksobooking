@@ -1,3 +1,7 @@
+import {sendData} from './api.js';
+import {showSuccessMessage, showFailMessage} from './message.js';
+import {resetMarker, resetMap} from './map.js';
+
 const minPrice = {
   bungalow: 0,
   flat: 1000,
@@ -18,7 +22,7 @@ const RoomValues = {
 const pageForm = document.querySelector('.ad-form');
 const mapForm = document.querySelector('.map__filters');
 const selects = document.querySelectorAll('select');
-const fildsets = document.querySelectorAll('fieldset');
+const fieldsets = document.querySelectorAll('fieldset');
 const title = pageForm.querySelector('#title');
 const typeOfApartment = pageForm.querySelector('#type');
 const apartmentPrice = pageForm.querySelector('#price');
@@ -27,6 +31,7 @@ const timeOut = pageForm.querySelector('#timeout');
 const roomNumber = pageForm.querySelector('#room_number');
 const capacity = pageForm.querySelector('#capacity');
 const address = pageForm.querySelector('#address');
+const resetButton = pageForm.querySelector('.ad-form__reset');
 
 const onRoomNumberChange = () => {
   if (+roomNumber.value < +capacity.value) {
@@ -42,7 +47,7 @@ const onRoomNumberChange = () => {
 
 const blockPage = (toggle) => {
   selects.forEach((item) => item.disabled = toggle);
-  fildsets.forEach((item) => item.disabled = toggle);
+  fieldsets.forEach((item) => item.disabled = toggle);
 
   if (toggle === true) {
     pageForm.classList.add('ad-form--disabled');
@@ -75,6 +80,25 @@ const onTitleChange = () => {
   title.reportValidity();
 }
 
+const onResetClick = (evt) => {
+  evt.preventDefault();
+  pageForm.reset();
+  resetMarker();
+  resetMap();
+}
+
+const handleFormSubmit = () => {
+  showSuccessMessage();
+  pageForm.reset();
+  resetMarker();
+  resetMap();
+}
+
+const handleFormFail = () => {
+  showFailMessage();
+  resetMarker();
+  resetMap();
+}
 
 typeOfApartment.addEventListener('change', onTypeChange);
 
@@ -88,13 +112,22 @@ roomNumber.addEventListener('change', onRoomNumberChange);
 
 capacity.addEventListener('change', onRoomNumberChange);
 
+resetButton.addEventListener('click', onResetClick);
+
+const setPageFormSubmit = () => {
+  pageForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
+    sendData(handleFormSubmit, handleFormFail, formData)
+  });
+};
 
 title.minLength = TitleRange.MIN;
 title.maxLength = TitleRange.MAX;
 address.readOnly = 'readonly';
 onTypeChange();
 onRoomNumberChange();
-blockPage(true);
 
-export {blockPage};
-
+export {blockPage, setPageFormSubmit, handleFormFail};

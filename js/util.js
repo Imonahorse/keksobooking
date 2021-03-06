@@ -40,8 +40,8 @@ const getRandomArray = (array) => {
 
 const getAddress = () => {
   return {
-    x: getRandomFloatingPoint(35.65, 35.7, 5),
-    y: getRandomFloatingPoint(139.7, 139.8, 5),
+    lat: getRandomFloatingPoint(35.65, 35.7, 5),
+    lng: getRandomFloatingPoint(139.7, 139.8, 5),
   }
 };
 
