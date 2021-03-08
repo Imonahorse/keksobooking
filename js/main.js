@@ -4,6 +4,22 @@ import './form.js';
 import {setPageFormSubmit} from './form.js';
 import {getData} from './api.js';
 import {showDataMessage} from './message.js'
+import {setFilterListener, updateMarkers} from './filter.js'
 
-getData(renderMarkers, showDataMessage);
+const onDataSuccess = (data) => {
+  renderMarkers(data);
+
+  setFilterListener(() => {
+    updateMarkers(data);
+  });
+}
+
+const onDataFail = () => {
+  showDataMessage()
+}
+
+getData(
+  (markers) => onDataSuccess(markers),
+  onDataFail);
+
 setPageFormSubmit();

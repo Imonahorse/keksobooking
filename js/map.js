@@ -58,7 +58,7 @@ const mainPinIcon = L.icon({
   iconAnchor: MainIcon.ANCHOR,
 })
 
-const marker = L.marker(
+const mainMarker = L.marker(
   {
     lat: StartAddressValue.X,
     lng: StartAddressValue.Y,
@@ -69,15 +69,16 @@ const marker = L.marker(
   },
 )
 
-marker.on('move', (evt) => {
+mainMarker.on('move', (evt) => {
   const {lat, lng} = evt.target.getLatLng();
   addressInput.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`
 })
 
-marker.addTo(map);
+mainMarker.addTo(map);
+
+const markers = L.layerGroup().addTo(map);
 
 const renderMarkers = (points) => {
-
   points.forEach((point) => {
     const icon = L.icon({
       iconUrl: CommonIcon.URL,
@@ -96,7 +97,7 @@ const renderMarkers = (points) => {
     );
 
     marker
-      .addTo(map)
+      .addTo(markers)
       .bindPopup(createSingleCard(point),
         {
           keepInView: true,
@@ -105,8 +106,12 @@ const renderMarkers = (points) => {
   });
 }
 
+const resetMarkers = () => {
+  markers.clearLayers();
+}
+
 const resetMarker = () => {
-  marker.setLatLng(
+  mainMarker.setLatLng(
     {
       lat: StartAddressValue.X,
       lng: StartAddressValue.Y,
@@ -118,4 +123,5 @@ const resetMap = () => {
   map.panTo([StartAddressValue.X, StartAddressValue.Y]);
 }
 
-export {renderMarkers, resetMarker, resetMap}
+export {renderMarkers, resetMarker, resetMap, resetMarkers}
+

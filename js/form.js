@@ -130,4 +130,4 @@ address.readOnly = 'readonly';
 onTypeChange();
 onRoomNumberChange();
 
-export {blockPage, setPageFormSubmit, handleFormFail};
+export {blockPage, setPageFormSubmit, handleFormFail, mapForm};
