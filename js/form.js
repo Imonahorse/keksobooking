@@ -1,6 +1,6 @@
 import {sendData} from './api.js';
 import {showSuccessMessage, showFailMessage} from './message.js';
-import {resetMarker, resetMap} from './map.js';
+import {resetMarker, resetMap, resetMarkers} from './map.js';
 
 const minPrice = {
   bungalow: 0,
