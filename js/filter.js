@@ -1,95 +1,81 @@
 import {resetMarkers, renderMarkers, resetMap} from './map.js';
 import {mapForm} from './form.js';
 
-const DEFAULT_HOUSE_TYPE = 'any';
-const Default_House_Price = {
+const DEFAULT_VALUE = 'any';
+const Price_Value = {
   LOW: 'low',
   MIDDLE: 'middle',
   HIGH: 'high',
+}
+const Price_Range = {
+  MIN: 10000,
+  MAX: 50000,
 }
 
 const housingType = mapForm.querySelector('#housing-type');
 const housingPrice = mapForm.querySelector('#housing-price');
 const housingRooms = mapForm.querySelector('#housing-rooms');
 const housingGuests = mapForm.querySelector('#housing-guests');
-const filterWifi = mapForm.querySelector('#filter-wifi');
-const filterDishwasher = mapForm.querySelector('#filter-dishwasher');
-const filterParking = mapForm.querySelector('#filter-parking');
-const filterWasher = mapForm.querySelector('#filter-washer');
-const filterElevator = mapForm.querySelector('#filter-elevator');
-const filterConditioner = mapForm.querySelector('#filter-conditioner');
 
-const filterType = (data) => {
-  if (housingType.value === DEFAULT_HOUSE_TYPE) {
-    return data;
+
+
+
+const filterMarkers = (data) => {
+  return data.filter((item) => {
+    return filterPrice(item) && filterType(item) && filterRooms(item) && filterGuests(item) && filterCheckbox(item);
+  });
+}
+
+const filterType = (marker) => {
+  if (housingType.value === DEFAULT_VALUE || housingType.value === marker.offer.type) {
+    return true
   }
-
-  return data.filter((item) => item.offer.type === housingType.value);
+  return false
 };
 
-const filterPrice = (data) => {
-  if (housingPrice.value === DEFAULT_HOUSE_TYPE) {
-    return data;
+const filterRooms = (marker) => {
+  if (housingRooms.value === DEFAULT_VALUE || marker.offer.rooms == housingRooms.value) {
+    return true;
   }
-  if (housingPrice.value === Default_House_Price.LOW) {
-    return data.filter((item) => item.offer.price < 10000);
-  }
-  if (housingPrice.value === Default_House_Price.MIDDLE) {
-    return data.filter((item) => item.offer.price >= 10000 && item.offer.price <= 50000);
-  }
-  if (housingPrice.value === Default_House_Price.HIGH) {
-    return data.filter((item) => item.offer.price > 50000);
-  }
+  return false;
 };
 
-const filterRooms = (data) => {
-  if (housingRooms.value === DEFAULT_HOUSE_TYPE) {
-    return data;
+const filterGuests = (marker) => {
+  if (housingGuests.value === DEFAULT_VALUE || marker.offer.guests == housingGuests.value) {
+    return true;
   }
-  return data.filter((item) => item.offer.rooms == housingRooms.value);
+  return false;
 };
 
-const filterGuests = (data) => {
-  if (housingGuests.value === DEFAULT_HOUSE_TYPE) {
-    return data;
+const filterPrice = (marker) => {
+  const filterPriceValue = {
+    low: marker.offer.price < Price_Range.MIN && Price_Value.LOW,
+    middle: marker.offer.price >= Price_Range.MIN && marker.offer.price <= Price_Range.MAX && Price_Value.MIDDLE,
+    high: marker.offer.price > Price_Range.MAX && Price_Value.HIGH,
   }
-  return data.filter((item) => item.offer.guests == housingGuests.value);
+
+  if (housingPrice.value === DEFAULT_VALUE || filterPriceValue[housingPrice.value]) {
+    return true;
+  }
+  return false;
 };
 
-const filterCheckbox = (data, checkbox) => {
-  const dataAfterFilter = [];
+const filterCheckbox = (marker) => {
+  const mapFeatures = mapForm.querySelectorAll('.map__checkbox:checked');
+  const featuresArray =[];
 
-  if (checkbox.checked === false) {
-    return data;
+  for(let feature of mapFeatures){
+    featuresArray.push(feature.value)
   }
 
-  if (checkbox.checked) {
-    data.forEach((item) => {
-
-      item.offer.features.forEach((element) => {
-        if (element === checkbox.value) {
-          dataAfterFilter.push(item);
-        }
-      })
-    })
-  }
-  return dataAfterFilter;
+  return featuresArray.every((item) => marker.offer.features.includes(item));
 };
 
 const updateMarkers = (data) => {
   resetMarkers();
   resetMap();
-  const dataType = filterType(data);
-  const dataPrice = filterPrice(dataType);
-  const dataRooms = filterRooms(dataPrice);
-  const dataGuests = filterGuests(dataRooms);
-  const dataCheckboxWifi = filterCheckbox(dataGuests, filterWifi);
-  const dataCheckboxDishwasher = filterCheckbox(dataCheckboxWifi, filterDishwasher);
-  const dataCheckboxParking = filterCheckbox(dataCheckboxDishwasher, filterParking);
-  const dataCheckboxWasher = filterCheckbox(dataCheckboxParking, filterWasher);
-  const dataCheckboxElevator = filterCheckbox(dataCheckboxWasher, filterElevator);
-  const dataCheckboxConditioner = filterCheckbox(dataCheckboxElevator, filterConditioner);
-  renderMarkers(dataCheckboxConditioner);
+  const filterData = filterMarkers(data);
+  renderMarkers(filterData);
 };
 
 const setFilterListener = (cb) => {
