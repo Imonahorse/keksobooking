@@ -1,29 +1,30 @@
 const FILE_TYPES = ['jpeg', 'jpg', 'png', 'gif'];
-const previewAlt = 'Фотография апартаментов';
+const DEFAULT_SRC = 'img/muffin-grey.svg';
+const REVIEW_SIZE = 70;
 
-const fileAvatar = document.querySelector('.ad-form-header__input');
-const previewAvatar = document.querySelector('.ad-form-header__preview img');
-const fileApartment = document.querySelector('.ad-form__input');
-const previewApartment = document.querySelector('.ad-form__photo');
+const avatarUploader = document.querySelector('.ad-form-header__input');
+const avatarPreview = document.querySelector('.ad-form-header__preview img');
+const housingPhotoUploader = document.querySelector('.ad-form__input');
+const housingPhotoContainer = document.querySelector('.ad-form__photo');
+const housingPhotoPreview = document.createElement('img');
+housingPhotoPreview.width = REVIEW_SIZE;
+housingPhotoPreview.height = REVIEW_SIZE;
 
-const createPreviewImg = () => {
-  const img = previewAvatar.cloneNode(true);
-  img.alt = previewAlt;
-  previewApartment.appendChild(img);
-  return img;
+const clearPreview = () => {
+  avatarPreview.src = DEFAULT_SRC;
+  housingPhotoPreview.remove();
 }
 
-const newPreview = createPreviewImg();
-
-const onPreviewChange = (place, preview) => {
-  const file = place.files[0];
+const onPreviewChange = (input, preview) => {
+  const file = input.files[0];
   const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((it) => fileName.endsWith(it))
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matches) {
     const reader = new FileReader();
 
     reader.addEventListener('load', () => {
+      housingPhotoContainer.appendChild(housingPhotoPreview);
       preview.src = reader.result;
     })
 
@@ -31,9 +32,11 @@ const onPreviewChange = (place, preview) => {
   }
 }
 
-fileAvatar.addEventListener('change', () => {
-  onPreviewChange(fileAvatar, previewAvatar);
+avatarUploader.addEventListener('change', () => {
+  onPreviewChange(avatarUploader, avatarPreview);
 });
-fileApartment.addEventListener('change', () => {
-  onPreviewChange(fileApartment, newPreview);
+housingPhotoUploader.addEventListener('change', () => {
+  onPreviewChange(housingPhotoUploader, housingPhotoPreview);
 });
+
+export {clearPreview};

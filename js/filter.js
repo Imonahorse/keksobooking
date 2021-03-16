@@ -1,7 +1,10 @@
 import {resetMarkers, renderMarkers, resetMap} from './map.js';
 
 const DEFAULT_VALUE = 'any';
-const FILTER_COUNT = 10;
+const Filter_Count = {
+  START: 0,
+  FINISH: 10,
+};
 const Price_Value = {
   LOW: 'low',
   MIDDLE: 'middle',
@@ -54,25 +57,28 @@ const filterPrice = (marker) => {
 
 const filterCheckbox = (marker) => {
   const mapFeatures = mapForm.querySelectorAll('.map__checkbox:checked');
-  const featuresArray = [];
 
-  for (let feature of mapFeatures) {
-    featuresArray.push(feature.value)
-  }
-
-  return featuresArray.every((item) => marker.offer.features.includes(item));
+  return Array.from(mapFeatures)
+    .map((element) => element.value)
+    .every((item) => marker.offer.features.includes(item));
 };
 
 const filterMarkers = (data) => {
   const filterData = [];
+  let element;
 
-  data.forEach((item) => {
-    const filter = filterPrice(item) && filterType(item) && filterRooms(item) && filterGuests(item) && filterCheckbox(item);
+  for (let i = Filter_Count.START; i < data.length; i++) {
+    element = data[i];
+    const isMatched = filterPrice(element) && filterType(element) && filterRooms(element) && filterGuests(element) && filterCheckbox(element);
 
-    if(filter && filterData.length < FILTER_COUNT) {
-      filterData.push(item);
+    if (isMatched) {
+      filterData.push(data[i]);
     }
-  });
+
+    if(filterData.length === Filter_Count.FINISH) {
+      return filterData;
+    }
+  }
   return filterData;
 }
 

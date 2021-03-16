@@ -52,7 +52,7 @@ const showFailMessage = () => {
   main.appendChild(errorMessage)
 };
 
-const showDataMessage = () => {
+const showErrorMessage = () => {
   const errorMessage = successMessage;
   const errorText = errorMessage.querySelector('.success__message');
   errorText.innerHTML = 'Произошла ошибка,</br> попробуйте снова позже';
@@ -77,4 +77,4 @@ const showDataMessage = () => {
   main.appendChild(errorMessage);
 }
 
-export {showSuccessMessage, showFailMessage, showDataMessage}
+export {showSuccessMessage, showFailMessage, showErrorMessage}

@@ -1,6 +1,7 @@
 import {sendData} from './api.js';
 import {showSuccessMessage, showFailMessage} from './message.js';
-import {resetMarker, resetMap, resetMarkers} from './map.js';
+import {resetMarker, resetMap, resetMarkers, renderMarkers} from './map.js';
+import {clearPreview} from './avatar.js';
 
 const minPrice = {
   bungalow: 0,
@@ -8,16 +9,14 @@ const minPrice = {
   house: 5000,
   palace: 10000,
 };
-
 const TitleRange = {
   MIN: 30,
   MAX: 100,
-}
-
+};
 const RoomValues = {
   ROOM: '100',
   PLACE: '0',
-}
+};
 
 const pageForm = document.querySelector('.ad-form');
 const mapForm = document.querySelector('.map__filters');
@@ -80,18 +79,27 @@ const onTitleChange = () => {
   title.reportValidity();
 }
 
-const onResetClick = (evt) => {
-  evt.preventDefault();
+const setPageToDefault = (data) => {
   pageForm.reset();
+  mapForm.reset();
+  clearPreview();
   resetMarker();
   resetMap();
+  resetMarkers();
+  renderMarkers(data);
+
 }
 
-const handleFormSubmit = () => {
+const handleFormSubmit = (data) => {
   showSuccessMessage();
+  mapForm.reset();
   pageForm.reset();
+  clearPreview();
   resetMarker();
   resetMap();
+  clearPreview();
+  resetMarkers();
+  renderMarkers(data);
 }
 
 const handleFormFail = () => {
@@ -112,15 +120,22 @@ roomNumber.addEventListener('change', onRoomNumberChange);
 
 capacity.addEventListener('change', onRoomNumberChange);
 
-resetButton.addEventListener('click', onResetClick);
+const clickOnResetButton = (data) => {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    setPageToDefault(data);
+  });
+}
 
-const setPageFormSubmit = () => {
+const setPageFormSubmit = (data) => {
   pageForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const formData = new FormData(evt.target);
 
-    sendData(handleFormSubmit, handleFormFail, formData)
+    sendData(() => handleFormSubmit(data),
+      handleFormFail,
+      formData)
   });
 };
 
@@ -130,4 +145,4 @@ address.readOnly = 'readonly';
 onTypeChange();
 onRoomNumberChange();
 
-export {blockPage, setPageFormSubmit, handleFormFail, mapForm};
+export {blockPage, setPageFormSubmit, handleFormFail, clickOnResetButton};
