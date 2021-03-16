@@ -5,7 +5,6 @@ import {
   getAddress
 } from './util.js';
 
-
 const TITLES = ['Привет', 'Hello', 'Bonjour', 'die Empfehlung'];
 
 const APARTMENTS = ['palace', 'flat', 'house', 'bungalow'];
