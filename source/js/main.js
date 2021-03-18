@@ -6,7 +6,7 @@ import {setPageFormSubmit, clickOnResetButton, blockPage} from './form.js';
 import {getData} from './api.js';
 import {showErrorMessage} from './message.js';
 import {setFilterListener, updateMarkers} from './filter.js';
-import './avatar.js';
+import './picture-upload.js';
 
 const RERENDER_DELAY = 500;
 const MARKER_COUNT = 10;

@@ -1,7 +1,7 @@
 import {sendData} from './api.js';
 import {showSuccessMessage, showFailMessage} from './message.js';
 import {resetMarker, resetMap, resetMarkers, renderMarkers} from './map.js';
-import {clearPreview} from './avatar.js';
+import {clearPreview} from './picture-upload.js';
 
 const minPrice = {
   bungalow: 0,
