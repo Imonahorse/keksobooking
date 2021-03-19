@@ -5,7 +5,8 @@
 *.pdf
 *.psd
 *.sublime*
-build/js/
+leaflet/
+build/js
 source/js/data.js
 source/js/old-util.js
 node_modules/
