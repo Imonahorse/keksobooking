@@ -8,6 +8,10 @@ const ICON_SIZE_X = 40;
 const ICON_SIZE_Y = 40;
 const ICON_ANCHOR_X = ICON_SIZE_X / 2;
 const ICON_ANCHOR_Y = ICON_SIZE_Y;
+const Marker_Count = {
+  FIRST: 0,
+  LAST: 10,
+};
 
 const LayerInfo = {
   URL: 'https://tile.jawg.io/de746faa-447c-4eb6-8260-7a692a455863/{z}/{x}/{y}.png?access-token=glVpOAWw5vB9ajv40MQCRq5QREOPc7FO4ig4CwVcuhqC8YYJOMtjg4lq9KmZ7ATT',
@@ -80,7 +84,9 @@ mainMarker.addTo(map);
 const markers = L.layerGroup().addTo(map);
 
 const renderMarkers = (points) => {
-  points.forEach((point) => {
+  const pointsRange = points.slice(Marker_Count.FIRST, Marker_Count.LAST)
+
+  pointsRange.forEach((point) => {
     const icon = L.icon({
       iconUrl: CommonIcon.URL,
       iconSize: CommonIcon.SIZE,

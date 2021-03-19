@@ -5,6 +5,9 @@
 *.pdf
 *.psd
 *.sublime*
+build/js/
+source/js/data.js
+source/js/old-util.js
 node_modules/
 npm-debug.log*
 Thumbs.db

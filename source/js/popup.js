@@ -43,6 +43,18 @@ const createPhotosList = (arr, clone) => {
   return photoList;
 };
 
+const removeEmptyElement = (card) => {
+  const children = card.children;
+
+  for (let child of children) {
+    if (!child.hasChildNodes() && child.tagName !== 'IMG') {
+      child.remove();
+    }
+  }
+
+  return card;
+}
+
 const createSingleCard = ({offer, author}) => {
   const card = cardTemplate.cloneNode(true);
 
@@ -57,7 +69,7 @@ const createSingleCard = ({offer, author}) => {
   createFeaturesList(offer.features, card);
   createPhotosList(offer.photos, card);
 
-  return card;
+  return removeEmptyElement(card);
 };
 
 export {createSingleCard};

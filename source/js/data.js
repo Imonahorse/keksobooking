@@ -3,7 +3,7 @@ import {
   getArrayRandomElement,
   getRandomArray,
   getAddress
-} from './util.js';
+} from './old-util.js';
 
 const TITLES = ['Привет', 'Hello', 'Bonjour', 'die Empfehlung'];
 

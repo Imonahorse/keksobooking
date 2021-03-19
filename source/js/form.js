@@ -1,7 +1,8 @@
 import {sendData} from './api.js';
+import {declOfNum} from './util.js'
 import {showSuccessMessage, showFailMessage} from './message.js';
 import {resetMarker, resetMap, resetMarkers, renderMarkers} from './map.js';
-import {clearPreview} from './avatar.js';
+import {clearPreview} from './picture-upload.js';
 
 const minPrice = {
   bungalow: 0,
@@ -70,9 +71,9 @@ const onSelectChange = (evt) => {
 const onTitleChange = () => {
   const value = title.value.length
   if (value < TitleRange.MIN) {
-    title.setCustomValidity(`Сообщение слишком короткое, не хватает еще ${TitleRange.MIN - value} символов`)
+    title.setCustomValidity(`Сообщение слишком короткое, добавьте ${TitleRange.MIN - value} ${declOfNum(TitleRange.MIN - value)}`)
   } else if (value > TitleRange.max) {
-    title.setCustomValidity(`Сообщение слишком длинное, уберите ${TitleRange.MAX - value} символа`)
+    title.setCustomValidity(`Сообщение слишком длинное, уберите ${TitleRange.MAX - value} ${declOfNum(TitleRange.MAX - value)}`)
   } else {
     title.setCustomValidity('');
   }
@@ -87,19 +88,11 @@ const setPageToDefault = (data) => {
   resetMap();
   resetMarkers();
   renderMarkers(data);
-
 }
 
 const handleFormSubmit = (data) => {
   showSuccessMessage();
-  mapForm.reset();
-  pageForm.reset();
-  clearPreview();
-  resetMarker();
-  resetMap();
-  clearPreview();
-  resetMarkers();
-  renderMarkers(data);
+  setPageToDefault(data);
 }
 
 const handleFormFail = () => {
