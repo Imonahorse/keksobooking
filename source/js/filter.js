@@ -1,5 +1,7 @@
+/* global _:readonly */
 import {resetMarkers, renderMarkers, resetMap} from './map.js';
 
+const RERENDER_DELAY = 500;
 const DEFAULT_VALUE = 'any';
 const Filter_Count = {
   START: 0,
@@ -89,8 +91,8 @@ const updateMarkers = (data) => {
   renderMarkers(filterData);
 };
 
-const setFilterListener = (cb) => {
-  mapForm.addEventListener('change', cb);
+const setFilterListener = (data) => {
+  mapForm.addEventListener('change', _.debounce(() => updateMarkers(data), RERENDER_DELAY));
 };
 
-export {setFilterListener, updateMarkers}
+export {setFilterListener}

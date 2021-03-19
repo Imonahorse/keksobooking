@@ -87,7 +87,6 @@ const setPageToDefault = (data) => {
   resetMap();
   resetMarkers();
   renderMarkers(data);
-
 }
 
 const handleFormSubmit = (data) => {

@@ -1,3 +1,5 @@
+import {isEscEvent} from './util.js';
+
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successMessage = successTemplate.cloneNode(true);
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -6,7 +8,7 @@ const button = errorMessage.querySelector('.error__button');
 const main = document.querySelector('main');
 const map = document.querySelector('.map');
 
-const isEscEvent = (evt) => evt.key === ('Escape' || 'Esc');
+
 
 const showSuccessMessage = () => {
   const onMessageKeydown = (evt) => {

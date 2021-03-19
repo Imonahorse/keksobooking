@@ -45,11 +45,14 @@ const getAddress = () => {
   }
 };
 
+const isEscEvent = (evt) => evt.key === ('Escape' || 'Esc');
+
 export {
   getRandomNumberInRange,
   getRandomIntegerInRange,
   getRandomFloatingPoint,
   getArrayRandomElement,
   getRandomArray,
-  getAddress
+  getAddress,
+  isEscEvent
 };

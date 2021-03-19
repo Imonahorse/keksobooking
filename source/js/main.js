@@ -1,19 +1,15 @@
-/* global _:readonly */
 import './map.js';
-import {renderMarkers} from './map.js';
 import './form.js';
-import {setPageFormSubmit, clickOnResetButton, blockPage} from './form.js';
-import {getData} from './api.js';
-import {showErrorMessage} from './message.js';
-import {setFilterListener, updateMarkers} from './filter.js';
 import './picture-upload.js';
-
-const RERENDER_DELAY = 500;
-const MARKER_COUNT = 10;
+import {getData} from './api.js';
+import {renderMarkers} from './map.js';
+import {showErrorMessage} from './message.js';
+import {setFilterListener} from './filter.js';
+import {setPageFormSubmit, clickOnResetButton, blockPage} from './form.js';
 
 const onDataSuccess = (data) => {
-  renderMarkers(data.slice(0, MARKER_COUNT));
-  setFilterListener(_.debounce(() => updateMarkers(data), RERENDER_DELAY));
+  renderMarkers(data);
+  setFilterListener(data);
   clickOnResetButton(data);
   setPageFormSubmit(data);
 }
