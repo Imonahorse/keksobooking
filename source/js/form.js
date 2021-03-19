@@ -91,14 +91,7 @@ const setPageToDefault = (data) => {
 
 const handleFormSubmit = (data) => {
   showSuccessMessage();
-  mapForm.reset();
-  pageForm.reset();
-  clearPreview();
-  resetMarker();
-  resetMap();
-  clearPreview();
-  resetMarkers();
-  renderMarkers(data);
+  setPageToDefault(data);
 }
 
 const handleFormFail = () => {

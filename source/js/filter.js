@@ -77,7 +77,7 @@ const filterMarkers = (data) => {
       filterData.push(data[i]);
     }
 
-    if(filterData.length === Filter_Count.FINISH) {
+    if (filterData.length === Filter_Count.FINISH) {
       return filterData;
     }
   }

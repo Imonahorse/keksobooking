@@ -2,10 +2,10 @@ import {isEscEvent} from './util.js';
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successMessage = successTemplate.cloneNode(true);
-const errorTextPlace = successMessage.querySelector('.success__message');
-const errorText = 'Не удалось получить данные с сервера, попробуйте попытку позже';
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const errorMessage = errorTemplate.cloneNode(true);
+const errorTextPlace = successMessage.querySelector('.success__message');
+const errorText = 'Не удалось получить данные с сервера, попробуйте попытку позже';
 
 const onMessageKeydown = (message) => {
   return (evt) => {
@@ -30,8 +30,8 @@ const removeMessage = (message) => {
 const showMessage = (message) => {
   document.body.appendChild(message);
   message.style.zIndex = '99999';
-  document.addEventListener('keydown', onMessageKeydown);
-  message.addEventListener('click', onMessageClick);
+  document.addEventListener('keydown', onMessageKeydown(message));
+  message.addEventListener('click', onMessageClick(message));
 };
 
 const showSuccessMessage = () => showMessage(successMessage);

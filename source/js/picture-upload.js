@@ -6,9 +6,14 @@ const avatarUploader = document.querySelector('.ad-form-header__input');
 const avatarPreview = document.querySelector('.ad-form-header__preview img');
 const housingPhotoUploader = document.querySelector('.ad-form__input');
 const housingPhotoContainer = document.querySelector('.ad-form__photo');
-const housingPhotoPreview = document.createElement('img');
-housingPhotoPreview.width = REVIEW_SIZE;
-housingPhotoPreview.height = REVIEW_SIZE;
+
+const createImg = () => {
+  const img = document.createElement('img');
+  img.width = REVIEW_SIZE;
+  img.height = REVIEW_SIZE;
+  return img;
+}
+const housingPhotoPreview = createImg();
 
 const clearPreview = () => {
   avatarPreview.src = DEFAULT_SRC;
@@ -24,7 +29,7 @@ const onPreviewChange = (input, preview) => {
     const reader = new FileReader();
 
     reader.addEventListener('load', () => {
-      housingPhotoContainer.appendChild(housingPhotoPreview);
+      housingPhotoContainer.appendChild(housingPhotoPreview)
       preview.src = reader.result;
     })
 
@@ -35,6 +40,7 @@ const onPreviewChange = (input, preview) => {
 avatarUploader.addEventListener('change', () => {
   onPreviewChange(avatarUploader, avatarPreview);
 });
+
 housingPhotoUploader.addEventListener('change', () => {
   onPreviewChange(housingPhotoUploader, housingPhotoPreview);
 });
