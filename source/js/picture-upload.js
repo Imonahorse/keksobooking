@@ -1,6 +1,6 @@
 const FILE_TYPES = ['jpeg', 'jpg', 'png', 'gif'];
 const DEFAULT_SRC = 'img/muffin-grey.svg';
-const REVIEW_SIZE = 70;
+const PREVIEW_SIZE = 70;
 
 const avatarUploader = document.querySelector('.ad-form-header__input');
 const avatarPreview = document.querySelector('.ad-form-header__preview img');
@@ -9,40 +9,39 @@ const housingPhotoContainer = document.querySelector('.ad-form__photo');
 
 const createImg = () => {
   const img = document.createElement('img');
-  img.width = REVIEW_SIZE;
-  img.height = REVIEW_SIZE;
+  img.src = DEFAULT_SRC;
+  img.width = PREVIEW_SIZE;
+  img.height = PREVIEW_SIZE;
+  housingPhotoContainer.appendChild(img);
   return img;
 }
+
 const housingPhotoPreview = createImg();
 
-const clearPreview = () => {
-  avatarPreview.src = DEFAULT_SRC;
-  housingPhotoPreview.remove();
-}
-
 const onPreviewChange = (input, preview) => {
-  const file = input.files[0];
-  const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+  return () => {
+    const file = input.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  if (matches) {
-    const reader = new FileReader();
+    if (matches) {
+      const reader = new FileReader();
 
-    reader.addEventListener('load', () => {
-      housingPhotoContainer.appendChild(housingPhotoPreview)
-      preview.src = reader.result;
-    })
+      reader.addEventListener('load', () => {
+        preview.src = reader.result;
+      })
 
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+    }
   }
 }
 
-avatarUploader.addEventListener('change', () => {
-  onPreviewChange(avatarUploader, avatarPreview);
-});
+const clearPreview = () => {
+  avatarPreview.src = DEFAULT_SRC;
+  housingPhotoPreview.src = DEFAULT_SRC;
+}
 
-housingPhotoUploader.addEventListener('change', () => {
-  onPreviewChange(housingPhotoUploader, housingPhotoPreview);
-});
+avatarUploader.addEventListener('change', onPreviewChange(avatarUploader, avatarPreview));
+housingPhotoUploader.addEventListener('change', onPreviewChange(housingPhotoUploader, housingPhotoPreview));
 
 export {clearPreview};
