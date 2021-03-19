@@ -3,7 +3,6 @@ import './form.js';
 import './picture-upload.js';
 import {getData} from './api.js';
 import {renderMarkers} from './map.js';
-import {showErrorMessage} from './message.js';
 import {setFilterListener} from './filter.js';
 import {setPageFormSubmit, clickOnResetButton, blockPage} from './form.js';
 
@@ -15,7 +14,6 @@ const onDataSuccess = (data) => {
 }
 
 const onDataFail = () => {
-  showErrorMessage();
   blockPage(true);
 }
 

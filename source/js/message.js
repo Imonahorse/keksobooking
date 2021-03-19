@@ -2,81 +2,43 @@ import {isEscEvent} from './util.js';
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successMessage = successTemplate.cloneNode(true);
+const errorTextPlace = successMessage.querySelector('.success__message');
+const errorText = 'Не удалось получить данные с сервера, попробуйте попытку позже';
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
 const errorMessage = errorTemplate.cloneNode(true);
-const button = errorMessage.querySelector('.error__button');
-const main = document.querySelector('main');
-const map = document.querySelector('.map');
 
-
-
-const showSuccessMessage = () => {
-  const onMessageKeydown = (evt) => {
+const onMessageKeydown = (message) => {
+  return (evt) => {
     if (isEscEvent(evt)) {
-      successMessage.remove();
-      document.removeEventListener('keydown', onMessageKeydown);
+      removeMessage(message);
     }
   }
-
-  const onMessageClick = () => {
-    successMessage.remove();
-    successMessage.removeEventListener('click', onMessageClick);
-    document.removeEventListener('keydown', onMessageKeydown);
-  }
-
-  window.addEventListener('keydown', onMessageKeydown);
-  successMessage.addEventListener('click', onMessageClick);
-
-  map.style.zIndex = '0';
-  main.appendChild(successMessage);
 }
 
-const showFailMessage = () => {
-  const onMessageKeydown = (evt) => {
-    if (isEscEvent(evt)) {
-      errorMessage.remove();
-      document.removeEventListener('keydown', onMessageKeydown);
-    }
+const onMessageClick = (message) => {
+  return () => {
+    removeMessage(message);
   }
+}
 
-  const onMessageClick = () => {
-    errorMessage.remove();
-    errorMessage.removeEventListener('click', onMessageClick);
-    button.removeEventListener('click', onMessageClick);
-    document.removeEventListener('keydown', onMessageKeydown);
-  }
+const removeMessage = (message) => {
+  message.remove();
+  message.removeEventListener('click', onMessageClick);
+  document.removeEventListener('keydown', onMessageKeydown);
+}
 
-  button.addEventListener('click', onMessageClick);
+const showMessage = (message) => {
+  document.body.appendChild(message);
+  message.style.zIndex = '99999';
   document.addEventListener('keydown', onMessageKeydown);
-  errorMessage.addEventListener('click', onMessageClick);
-
-  map.style.zIndex = '0';
-  main.appendChild(errorMessage)
+  message.addEventListener('click', onMessageClick);
 };
 
+const showSuccessMessage = () => showMessage(successMessage);
+const showFailMessage = () => showMessage(errorMessage);
 const showErrorMessage = () => {
-  const errorMessage = successMessage;
-  const errorText = errorMessage.querySelector('.success__message');
-  errorText.innerHTML = 'Произошла ошибка,</br> попробуйте снова позже';
-
-  const onMessageKeydown = (evt) => {
-    if (isEscEvent(evt)) {
-      errorMessage.remove();
-      document.removeEventListener('keydown', onMessageKeydown);
-    }
-  }
-
-  const onMessageClick = () => {
-    errorMessage.remove();
-    errorMessage.removeEventListener('click', onMessageClick);
-    document.removeEventListener('keydown', onMessageKeydown);
-  }
-
-  window.addEventListener('keydown', onMessageKeydown);
-  successMessage.addEventListener('click', onMessageClick);
-
-  map.style.zIndex = '0';
-  main.appendChild(errorMessage);
+  showErrorMessage();
+  errorTextPlace.textContent = errorText;
 }
 
 export {showSuccessMessage, showFailMessage, showErrorMessage}
