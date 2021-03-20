@@ -8,7 +8,7 @@ const ICON_SIZE_X = 40;
 const ICON_SIZE_Y = 40;
 const ICON_ANCHOR_X = ICON_SIZE_X / 2;
 const ICON_ANCHOR_Y = ICON_SIZE_Y;
-const Marker_Count = {
+const MarkerСount = {
   FIRST: 0,
   LAST: 10,
 };
@@ -84,7 +84,7 @@ mainMarker.addTo(map);
 const markers = L.layerGroup().addTo(map);
 
 const renderMarkers = (points) => {
-  const pointsRange = points.slice(Marker_Count.FIRST, Marker_Count.LAST)
+  const pointsRange = points.slice(MarkerСount.FIRST, MarkerСount.LAST)
 
   pointsRange.forEach((point) => {
     const icon = L.icon({
