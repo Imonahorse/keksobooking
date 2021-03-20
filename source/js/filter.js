@@ -3,16 +3,16 @@ import {resetMarkers, renderMarkers, resetMap} from './map.js';
 
 const RERENDER_DELAY = 500;
 const DEFAULT_VALUE = 'any';
-const Filter_Count = {
+const FilterCount = {
   START: 0,
   FINISH: 10,
 };
-const Price_Value = {
+const PriceValue = {
   LOW: 'low',
   MIDDLE: 'middle',
   HIGH: 'high',
 }
-const Price_Range = {
+const PriceRange = {
   MIN: 10000,
   MAX: 50000,
 }
@@ -31,14 +31,14 @@ const filterType = (marker) => {
 };
 
 const filterRooms = (marker) => {
-  if (housingRooms.value === DEFAULT_VALUE || marker.offer.rooms == housingRooms.value) {
+  if (housingRooms.value === DEFAULT_VALUE || marker.offer.rooms === Number(housingRooms.value)) {
     return true;
   }
   return false;
 };
 
 const filterGuests = (marker) => {
-  if (housingGuests.value === DEFAULT_VALUE || marker.offer.guests == housingGuests.value) {
+  if (housingGuests.value === DEFAULT_VALUE || marker.offer.guests === Number(housingGuests.value)) {
     return true;
   }
   return false;
@@ -46,9 +46,9 @@ const filterGuests = (marker) => {
 
 const filterPrice = (marker) => {
   const filterPriceValue = {
-    low: marker.offer.price < Price_Range.MIN && Price_Value.LOW,
-    middle: marker.offer.price >= Price_Range.MIN && marker.offer.price <= Price_Range.MAX && Price_Value.MIDDLE,
-    high: marker.offer.price > Price_Range.MAX && Price_Value.HIGH,
+    low: marker.offer.price < PriceRange.MIN && PriceValue.LOW,
+    middle: marker.offer.price >= PriceRange.MIN && marker.offer.price <= PriceRange.MAX && PriceValue.MIDDLE,
+    high: marker.offer.price > PriceRange.MAX && PriceValue.HIGH,
   }
 
   if (housingPrice.value === DEFAULT_VALUE || filterPriceValue[housingPrice.value]) {
@@ -69,7 +69,7 @@ const filterMarkers = (data) => {
   const filterData = [];
   let element;
 
-  for (let i = Filter_Count.START; i < data.length; i++) {
+  for (let i = FilterCount.START; i < data.length; i++) {
     element = data[i];
     const isMatched = filterPrice(element) && filterType(element) && filterRooms(element) && filterGuests(element) && filterCheckbox(element);
 
@@ -77,7 +77,7 @@ const filterMarkers = (data) => {
       filterData.push(data[i]);
     }
 
-    if (filterData.length === Filter_Count.FINISH) {
+    if (filterData.length === FilterCount.FINISH) {
       return filterData;
     }
   }
